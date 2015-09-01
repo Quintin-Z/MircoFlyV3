@@ -1,0 +1,13 @@
+.\build\workqueue.o: ..\rt-thread\components\drivers\src\workqueue.c
+.\build\workqueue.o: ..\rt-thread\include\rtthread.h
+.\build\workqueue.o: .\rtconfig.h
+.\build\workqueue.o: ..\rt-thread\include\rtdebug.h
+.\build\workqueue.o: ..\rt-thread\include\rtdef.h
+.\build\workqueue.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdarg.h
+.\build\workqueue.o: ..\rt-thread\include\rtservice.h
+.\build\workqueue.o: ..\rt-thread\include\rtm.h
+.\build\workqueue.o: ..\rt-thread\include\rtthread.h
+.\build\workqueue.o: ..\rt-thread\components\drivers\include\rtdevice.h
+.\build\workqueue.o: ..\rt-thread\components\drivers\include\drivers/serial.h
+.\build\workqueue.o: ..\rt-thread\components\drivers\include\drivers/pin.h
+.\build\workqueue.o: ..\rt-thread\components\drivers\include\rtdevice.h

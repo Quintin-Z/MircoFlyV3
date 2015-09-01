@@ -1,0 +1,14 @@
+.\build\ringbuffer.o: ..\rt-thread\components\drivers\src\ringbuffer.c
+.\build\ringbuffer.o: ..\rt-thread\include\rtthread.h
+.\build\ringbuffer.o: .\rtconfig.h
+.\build\ringbuffer.o: ..\rt-thread\include\rtdebug.h
+.\build\ringbuffer.o: ..\rt-thread\include\rtdef.h
+.\build\ringbuffer.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdarg.h
+.\build\ringbuffer.o: ..\rt-thread\include\rtservice.h
+.\build\ringbuffer.o: ..\rt-thread\include\rtm.h
+.\build\ringbuffer.o: ..\rt-thread\include\rtthread.h
+.\build\ringbuffer.o: ..\rt-thread\components\drivers\include\rtdevice.h
+.\build\ringbuffer.o: ..\rt-thread\components\drivers\include\drivers/serial.h
+.\build\ringbuffer.o: ..\rt-thread\components\drivers\include\drivers/pin.h
+.\build\ringbuffer.o: ..\rt-thread\components\drivers\include\rtdevice.h
+.\build\ringbuffer.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\string.h
