@@ -66,6 +66,8 @@
 #define RT_USING_UART2
 #define RT_USING_UART3
 
+#define RT_USING_SPI
+
 /* Using GPIO pin framework */
 #define RT_USING_PIN
 
@@ -100,65 +102,14 @@
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  512
 
+#define RT_USING_COMPONENTS_INIT
+#define RT_USING_SENSOR
+
+#define RT_USING_CPLUSPLUS
+#define RT_USING_LIBC
 /* Using ROM file system */
 // #define RT_USING_DFS_ROMFS
 
-/* SECTION: lwip, a lighwight TCP/IP protocol stack */
-/* #define RT_USING_LWIP */
-/* LwIP uses RT-Thread Memory Management */
-#define RT_LWIP_USING_RT_MEM
-/* Enable ICMP protocol*/
-#define RT_LWIP_ICMP
-/* Enable UDP protocol*/
-#define RT_LWIP_UDP
-/* Enable TCP protocol*/
-#define RT_LWIP_TCP
-/* Enable DNS */
-#define RT_LWIP_DNS
-
-/* the number of simulatenously active TCP connections*/
-#define RT_LWIP_TCP_PCB_NUM	5
-
-/* ip address of target*/
-#define RT_LWIP_IPADDR0	192
-#define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	1
-#define RT_LWIP_IPADDR3	201
-
-/* gateway address of target*/
-#define RT_LWIP_GWADDR0	192
-#define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	1
-#define RT_LWIP_GWADDR3	1
-
-/* mask address of target*/
-#define RT_LWIP_MSKADDR0	255
-#define RT_LWIP_MSKADDR1	255
-#define RT_LWIP_MSKADDR2	255
-#define RT_LWIP_MSKADDR3	0
-
-/* tcp thread options */
-#define RT_LWIP_TCPTHREAD_PRIORITY		12
-#define RT_LWIP_TCPTHREAD_MBOX_SIZE		4
-#define RT_LWIP_TCPTHREAD_STACKSIZE		1024
-
-/* ethernet if thread options */
-#define RT_LWIP_ETHTHREAD_PRIORITY		15
-#define RT_LWIP_ETHTHREAD_MBOX_SIZE		4
-#define RT_LWIP_ETHTHREAD_STACKSIZE		512
-
-/* TCP sender buffer space */
-#define RT_LWIP_TCP_SND_BUF	8192
-/* TCP receive window. */
-#define RT_LWIP_TCP_WND		8192
-
-#define CHECKSUM_CHECK_TCP              0
-#define CHECKSUM_CHECK_IP               0
-#define CHECKSUM_CHECK_UDP              0
-
-#define CHECKSUM_GEN_TCP                0
-#define CHECKSUM_GEN_IP                 0
-#define CHECKSUM_GEN_UDP                0
 
 /* RT_GDB_STUB */
 //#define RT_USING_GDB

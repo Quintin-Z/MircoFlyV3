@@ -29,6 +29,8 @@
 
 void rt_init_thread_entry(void* parameter)
 {
+	rt_components_init();
+	
     /* GDB STUB */
 #ifdef RT_USING_GDB
     gdb_set_device("uart6");
