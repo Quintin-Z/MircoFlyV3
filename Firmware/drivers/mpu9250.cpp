@@ -223,3 +223,163 @@ MPU9250_Accelerometer::getSensor(sensor_t *sensor)
 		  rt_memcpy(sensor, &this->acc_sensor_info, sizeof(sensor_t));
     }
 }
+
+MPU9250_Gyroscope::MPU9250_Gyroscope(const char* spi_name)
+    : MPU9250(SENSOR_TYPE_GYROSCOPE, spi_name)
+{
+	int index;
+	rt_uint8_t value[6];
+	rt_int32_t x, y, z;
+
+    /* initialize MPU9250 */
+    write_reg(MPU9250_PWR_MGMT_1,   0x80);			/* reset MPU9250 device 									*/
+	write_reg(MPU9250_SMPLRT_DIV,   0x00);			/* Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV) 	*/
+    write_reg(MPU9250_PWR_MGMT_1,   0x03);			/* Wake up device , set device clock Z axis gyroscope		*/
+	write_reg(MPU9250_CONFIG,   	0x03);			/* set DLPF_CFG 42Hz 										*/
+    write_reg(MPU9250_GYRO_CONFIG,  0x18);			/* set gyro 2000deg/s										*/
+    write_reg(MPU9250_ACCEL_CONFIG, 0x08);			/* set acc +-4g/s 											*/
+
+	x_offset = y_offset = z_offset = 0;
+	x = y = z = 0;
+
+	/* get offset */
+	for (index = 0; index < 200; index ++)
+	{
+		read_buffer(MPU9250_GYRO_XOUT_H, value, 6);
+
+		x += (((rt_int16_t)value[0] << 8)   | value[1]);
+		y += (((rt_int16_t)value[2] << 8)   | value[3]);
+		z += (((rt_int16_t)value[4] << 8)   | value[5]);		
+	}
+	x_offset = x / 200;
+	y_offset = y / 200;
+	z_offset = z / 200;
+
+	this->enable = RT_FALSE;
+	this->sensitivity = SENSOR_GYRO_SENSITIVITY_250DPS;
+}
+
+int 
+MPU9250_Gyroscope::configure(SensorConfig *config)
+{
+	int range;
+	uint8_t value;
+
+	if (config == RT_NULL) return -1;
+
+	/* TODO: set datarate */
+
+	/* get range and calc the sensitivity */
+	range = config->range.gyro_range;
+	switch (range)
+	{
+	case SENSOR_GYRO_RANGE_250DPS:
+		this->sensitivity = SENSOR_GYRO_SENSITIVITY_250DPS;
+		range = 0;
+		break;
+	case SENSOR_GYRO_RANGE_500DPS:
+		this->sensitivity = SENSOR_GYRO_SENSITIVITY_500DPS;
+		range = 0x01 << 2;
+		break;
+	case SENSOR_GYRO_RANGE_1000DPS:
+		this->sensitivity = SENSOR_GYRO_SENSITIVITY_1000DPS;
+		range = 0x02 << 2;
+		break;
+	case SENSOR_GYRO_RANGE_2000DPS:
+		this->sensitivity = SENSOR_GYRO_SENSITIVITY_2000DPS;
+		range = 0x03 << 2;
+		break;
+	default:
+		return -1;
+	}
+
+	/* set range to sensor */
+	read_reg(MPU9250_GYRO_CONFIG, &value);
+	value &= ~(0x3 << 2);
+	value |= range;
+	write_reg(MPU9250_GYRO_CONFIG, value);
+
+    return 0;
+}
+
+int 
+MPU9250_Gyroscope::activate(int enable)
+{
+	uint8_t value;
+	
+    if (enable && this->enable == RT_FALSE)
+    {
+        /* enable gyroscope */
+		read_reg(MPU9250_PWR_MGMT_1, &value);
+		value &= ~(0x01 << 4);
+		write_reg(MPU9250_PWR_MGMT_1, value);
+
+		read_reg(MPU9250_PWR_MGMT_2, &value); 
+		value &= ~(0x07 << 0);
+		write_reg(MPU9250_PWR_MGMT_2, value);
+    }
+
+	if (!enable && this->enable == RT_TRUE)
+    {
+        /* disable gyroscope */
+		read_reg(MPU9250_PWR_MGMT_2, &value); 
+		value |= (0x07 << 0);
+		write_reg(MPU9250_PWR_MGMT_2, value);
+    }
+
+	if (enable) this->enable = RT_TRUE;
+	else this->enable = RT_FALSE;
+
+    return 0;
+}
+
+int 
+MPU9250_Gyroscope::poll(sensors_event_t *event)
+{
+	rt_uint8_t value[6];
+	rt_int16_t x, y, z;
+
+	/* parameters check */
+	if (event == NULL) return -1;
+
+	/* get event data */
+	event->version = sizeof(sensors_event_t);
+	event->sensor = (int32_t) this;
+	event->timestamp = rt_tick_get();
+	event->type = SENSOR_TYPE_GYROSCOPE;
+
+	read_buffer(MPU9250_GYRO_XOUT_H, value, 6);
+
+	/* get raw data */
+	x = (((rt_int16_t)value[0] << 8) | value[1]);
+	y = (((rt_int16_t)value[2] << 8) | value[3]);
+	z = (((rt_int16_t)value[4] << 8) | value[5]);
+
+	
+	if (config.mode == SENSOR_MODE_RAW)
+	{
+		event->raw_gyro.x = x;
+		event->raw_gyro.y = y;
+		event->raw_gyro.z = z;
+	}
+	else
+	{
+		x -= x_offset; y -= y_offset; z -= z_offset;
+		event->gyro.x = x * this->sensitivity * SENSORS_DPS_TO_RADS;
+		event->gyro.y = y * this->sensitivity * SENSORS_DPS_TO_RADS;
+		event->gyro.z = z * this->sensitivity * SENSORS_DPS_TO_RADS;
+	}
+	
+	return 0;
+}
+
+void 
+MPU9250_Gyroscope::getSensor(sensor_t *sensor)
+{
+    /* get sensor description */
+    if (sensor)
+    {
+		
+    }
+}
+

@@ -371,4 +371,22 @@ private:
 	sensor_t acc_sensor_info;
 };
 
+class MPU9250_Gyroscope:public MPU9250
+{
+public:
+    MPU9250_Gyroscope(const char* spi_name);
+
+    virtual int configure(SensorConfig *config);
+    virtual int activate(int enable);
+
+    virtual int poll(sensors_event_t *event);
+    virtual void getSensor(sensor_t *sensor);
+
+private:
+	rt_int16_t x_offset, y_offset, z_offset;
+	
+	rt_bool_t enable;
+	float sensitivity;	
+};
+
 #endif

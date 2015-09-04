@@ -82,7 +82,7 @@ elif PLATFORM == 'armcc':
     else:
         CFLAGS += ' -O2'
 
-    POST_ACTION = 'fromelf --bin $TARGET --output rtthread.bin \nfromelf -z $TARGET'
+    POST_ACTION = 'fromelf --bin $TARGET --output mfv3-firmware.bin \nfromelf -z $TARGET'
 
 elif PLATFORM == 'iar':
     # toolchains
