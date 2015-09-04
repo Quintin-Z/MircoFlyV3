@@ -413,8 +413,11 @@ int stm32_hw_spi_init(void)
 	static struct rt_spi_device rt_spi_device_mpu6500;
 	static struct stm32_spi_cs  stm32_spi_cs_mpu6500;
 	static struct rt_spi_device rt_spi_device_ms5611;
-	static struct stm32_spi_cs  stm32_spi_cs_ms5611;	
+	static struct stm32_spi_cs  stm32_spi_cs_ms5611;
 	
+	static struct stm32_spi_bus stm32_spi_2;
+	static struct rt_spi_device rt_spi_device_flash;
+	static struct stm32_spi_cs  stm32_spi_cs_flash;
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	/* Enable SPI1 Periph clock */
@@ -471,6 +474,45 @@ int stm32_hw_spi_init(void)
 	GPIO_SetBits(GPIOD, GPIO_Pin_2);
 
 	rt_spi_bus_attach_device(&rt_spi_device_ms5611, "ms5611", "spi1", (void*)&stm32_spi_cs_ms5611);
+	
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
+	
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_SPI2);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource14, GPIO_AF_SPI2);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_SPI2);
+	
+	/* Configure SPI2 pins */
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; 
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP; 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+	
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	stm32_spi_register(SPI2, &stm32_spi_2, "spi2");
+
+	stm32_spi_cs_flash.GPIOx = GPIOB;
+	stm32_spi_cs_flash.GPIO_Pin = GPIO_Pin_12;
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_SetBits(GPIOB, GPIO_Pin_10);
+	GPIO_SetBits(GPIOB, GPIO_Pin_11);
+	GPIO_SetBits(GPIOB, GPIO_Pin_12);
+	
+	rt_spi_bus_attach_device(&rt_spi_device_flash, "flash_bus","spi2", (void*)&stm32_spi_cs_flash);
+	
+	
 	return 0;
 }
 INIT_DEVICE_EXPORT(stm32_hw_spi_init);

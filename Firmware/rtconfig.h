@@ -84,7 +84,7 @@
 
 /* SECTION: device filesystem */
 /* Using Device file system */
-/* #define RT_USING_DFS */
+#define RT_USING_DFS 
 /* the max number of mounted filesystem */
 #define DFS_FILESYSTEMS_MAX			2
 /* the max number of opened files 		*/
@@ -100,15 +100,26 @@
 /* #define RT_DFS_ELM_USE_LFN			1 */
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
-#define RT_DFS_ELM_MAX_SECTOR_SIZE  512
+#define RT_DFS_ELM_MAX_SECTOR_SIZE  4096
+
+#define DFS_USING_WORKDIR
+#define DFS_FILESYSTEMS_MAX	2
+#define RT_USING_DFS_ELMFAT
+#define RT_DFS_ELM_DRIVES    2
+#define RT_DFS_ELM_REENTRANT
+#define RT_DFS_ELM_USE_LFN	3
+#define RT_DFS_ELM_CODE_PAGE	932
+#define RT_USING_DFS_DEVFS
 
 #define RT_USING_COMPONENTS_INIT
 #define RT_USING_SENSOR
 
 #define RT_USING_CPLUSPLUS
 #define RT_USING_LIBC
-/* Using ROM file system */
-// #define RT_USING_DFS_ROMFS
+
+#define RT_USING_W25QXX
+#define RT_USING_DFS_ELMFAT
+
 
 
 /* RT_GDB_STUB */

@@ -59,6 +59,8 @@ if PLATFORM == 'gcc':
 elif PLATFORM == 'armcc':
     # toolchains
     CC = 'armcc'
+    CXX = 'armcc'
+    print CXX
     AS = 'armasm'
     AR = 'armar'
     LINK = 'armlink'

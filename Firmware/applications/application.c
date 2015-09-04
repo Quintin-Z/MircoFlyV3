@@ -27,9 +27,41 @@
 #include <gdb_stub.h>
 #endif
 
+#ifdef RT_USING_W25QXX	
+#include <spi_flash_w25qxx.h>
+#include <dfs_posix.h>
+#endif
+
 void rt_init_thread_entry(void* parameter)
 {
 	rt_components_init();
+	
+#ifdef RT_USING_W25QXX	
+	w25qxx_init("flash0","flash_bus");
+	if (dfs_mount("flash0", "/", "elm", 0, 0) == 0)
+    {  
+        rt_kprintf("mount flash0 to / ok\r\n");
+		
+    }  
+    else  
+	{ 
+		if(dfs_mkfs("elm","flash0") == 0)
+		{
+			rt_kprintf("mkfs elm filesystem on flash0 successful.\r\n"); 
+			if (dfs_mount("flash0", "/", "elm", 0, 0) == 0)
+			{
+				rt_kprintf("mount flash0 to / ok.\r\n");  
+			}
+			else
+			{
+				rt_kprintf("mount flash0 to / failed.\r\n");  
+			}
+		}else
+		{
+			rt_kprintf("mkfs elm on flash0 failed.\r\n");  
+		}
+    }
+#endif
 	
     /* GDB STUB */
 #ifdef RT_USING_GDB
