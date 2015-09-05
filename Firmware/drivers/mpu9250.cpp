@@ -32,13 +32,6 @@ MPU9250::MPU9250(int sensor_type, const char* spi_bus)
 		rt_spi_configure(this->spi_device, &cfg);	
 	}
 	
-	rt_uint8_t id = 0;
-	read_reg(MPU9250_WHO_AM_I, &id);
-	if(id == WHOAMI_RESET_VAL)
-	{
-		rt_kprintf("mpu9250 detection\n");
-	}
-	
     /* register to sensor manager */
     SensorManager::registerSensor(this);	
 }
@@ -86,6 +79,13 @@ MPU9250_Accelerometer::MPU9250_Accelerometer(const char* spi_name)
 	this->acc_sensor_info.fifoReservedEventCount = 0;
 	this->acc_sensor_info.fifoMaxEventCount = 64;
 		
+	rt_uint8_t id = 0;
+	read_reg(MPU9250_WHO_AM_I, &id);
+	if(id == WHOAMI_RESET_VAL)
+	{
+		rt_kprintf("MPU6500 detection\n");
+	}
+	
     SensorConfig config = {SENSOR_MODE_NORMAL, SENSOR_DATARATE_400HZ, SENSOR_ACCEL_RANGE_2G};
 
 	/* initialize MPU9250 */
@@ -383,3 +383,77 @@ MPU9250_Gyroscope::getSensor(sensor_t *sensor)
     }
 }
 
+MPU9250_Magnetometer::MPU9250_Magnetometer(const char* spi_name)
+    : MPU9250(SENSOR_TYPE_MAGNETIC_FIELD, spi_name)
+{
+	rt_uint8_t id = 0x00;
+	
+	write_reg(MPU9250_I2C_MST_CTRL, 0x40); 
+	write_reg(MPU9250_USER_CTRL, 0x20); 
+	write_reg(MPU9250_I2C_MST_DELAY_CTRL,0x01); 
+	
+	write_reg(MPU9250_I2C_SLV0_ADDR, 0x8C);          // Set AK8963_I2C_ADDR = 7'b000_1100
+	write_reg(MPU9250_I2C_SLV0_REG, MPU9250_MAG_WIA);     // Set Write Reg
+	write_reg(MPU9250_I2C_SLV0_CTRL, 0x81);          // Start Read
+	delay_ms(1);
+	read_reg(MPU9250_EXT_SENS_DATA_00, &id);   // Read Data
+	if(id == 0x48)
+		rt_kprintf("AK8963 detection\n");
+	  
+//	//SLV0
+//	write_reg(MPU9250_I2C_SLV0_ADDR, 0X8C);//AK8975 Address READ
+//	write_reg(MPU9250_I2C_SLV0_REG, 0X03);//AK8975 HXL
+//	write_reg(MPU9250_I2C_SLV0_CTRL, 0x86);//enable		
+
+//	//SLV1
+//	write_reg(MPU9250_I2C_SLV1_ADDR, 0X0C);//AK8975 Address READ
+//	write_reg(MPU9250_I2C_SLV1_REG, 0X0A);//AK8975 CNTL1
+//	write_reg(MPU9250_I2C_SLV1_CTRL, 0x81);//enable	
+//	write_reg(100, 0X11);//16BIT Single measurement mode 
+//	
+//	write_reg(52, 0x04);//I2C_MST_DLY = 4
+//	write_reg(103, 0x03);//I2C_SLV0_DLY_EN 
+}
+
+void  
+MPU9250_Magnetometer::delay_ms(int ms)		
+{
+	int i = 0;
+	while(ms--)
+	{
+		i = 12000;
+		while(i--);
+	}
+}
+
+int 
+MPU9250_Magnetometer::configure(SensorConfig *config)
+{
+
+    return 0;
+}
+
+int 
+MPU9250_Magnetometer::activate(int enable)
+{
+
+    return 0;
+}
+
+int 
+MPU9250_Magnetometer::poll(sensors_event_t *event)
+{
+
+	
+	return 0;
+}
+
+void 
+MPU9250_Magnetometer::getSensor(sensor_t *sensor)
+{
+    /* get sensor description */
+    if (sensor)
+    {
+		
+    }
+}

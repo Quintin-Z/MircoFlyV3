@@ -76,9 +76,9 @@ uint8_t MS5611_ReadPROM(void)
 {
 	uint8_t buffer[MS5611_PROM_REG_SIZE];
 	uint16_t* pCalRegU16 = (uint16_t*)&calReg;
-
+	uint8_t i;
 	rt_uint8_t send_buff;
-	for (uint8_t i = 0; i < MS5611_PROM_REG_COUNT; i++)
+	for (i = 0; i < MS5611_PROM_REG_COUNT; i++)
 	{
 		send_buff = MS5611_PROM_BASE_ADDR + (i * MS5611_PROM_REG_SIZE);
 		rt_spi_send_then_recv(ms5611_dev,&send_buff,1,buffer,2);
