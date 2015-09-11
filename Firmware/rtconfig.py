@@ -60,16 +60,15 @@ elif PLATFORM == 'armcc':
     # toolchains
     CC = 'armcc'
     CXX = 'armcc'
-    print CXX
     AS = 'armasm'
     AR = 'armar'
     LINK = 'armlink'
     TARGET_EXT = 'axf'
 
     DEVICE = ' --cpu=cortex-m4.fp'
-    CFLAGS = DEVICE + ' --apcs=interwork -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx'
+    CFLAGS = DEVICE + ' --apcs=interwork -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx -c99'
     AFLAGS = DEVICE
-    LFLAGS = DEVICE + ' --info sizes --info totals --info unused --info veneers --list mfv3-firmware.map --scatter stm32_rom.sct'
+    LFLAGS = DEVICE + ' --info sizes --info totals --info unused --info veneers --list mfv3-firmware.map --scatter mfv3-firmware.sct'
 
     CFLAGS += ' -I' + EXEC_PATH + '/ARM/RV31/INC'
     LFLAGS += ' --libpath ' + EXEC_PATH + '/ARM/RV31/LIB'
@@ -123,6 +122,6 @@ elif PLATFORM == 'iar':
     LFLAGS += ' --redirect _Printf=_PrintfTiny' 
     LFLAGS += ' --redirect _Scanf=_ScanfSmall' 
     LFLAGS += ' --entry __iar_program_start'    
-
+ 
     EXEC_PATH = IAR_PATH + '/arm/bin/'
     POST_ACTION = ''

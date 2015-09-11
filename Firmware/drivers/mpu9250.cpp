@@ -364,7 +364,7 @@ MPU9250_Gyroscope::poll(sensors_event_t *event)
 	}
 	else
 	{
-		x -= x_offset; y -= y_offset; z -= z_offset;
+//		x -= x_offset; y -= y_offset; z -= z_offset;
 		event->gyro.x = x * this->sensitivity * SENSORS_DPS_TO_RADS;
 		event->gyro.y = y * this->sensitivity * SENSORS_DPS_TO_RADS;
 		event->gyro.z = z * this->sensitivity * SENSORS_DPS_TO_RADS;

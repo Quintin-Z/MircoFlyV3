@@ -471,11 +471,6 @@
               <FileType>8</FileType>
               <FilePath>.\drivers\mpu9250.cpp</FilePath>
             </File>
-            <File>
-              <FileName>ms5611.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\drivers\ms5611.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

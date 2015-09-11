@@ -48,7 +48,7 @@ int gyro_test(int argc, char** argv)
     if (sensor != RT_NULL)
     {
         int index;
-        SensorConfig config = {SENSOR_MODE_NORMAL, SENSOR_DATARATE_100HZ, SENSOR_GYRO_RANGE_250DPS};
+        SensorConfig config = {SENSOR_MODE_NORMAL, SENSOR_DATARATE_100HZ, SENSOR_GYRO_RANGE_2000DPS};
 
         rt_sensor_activate(sensor, 1);
         rt_sensor_configure(sensor, &config);

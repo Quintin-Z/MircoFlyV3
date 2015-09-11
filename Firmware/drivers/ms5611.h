@@ -45,7 +45,7 @@
 #define CONST_PF 0.1902630958f //(1/5.25588f) Pressure factor
 #define CONST_PF2 44330.0f
 
-uint8_t MS5611_Init(void);
+int MS5611_Init(void);
 
 //返回值:0，成功;1，失败
 uint8_t MS5611_SelfTest(void);

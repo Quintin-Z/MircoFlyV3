@@ -257,7 +257,7 @@ int32_t MS5611_RawTemperature(uint8_t osr)
 	}
 }
 
-uint8_t MS5611_Init(void)
+int MS5611_Init(void)
 {
 	struct rt_spi_configuration cfg;
 
@@ -376,4 +376,4 @@ float MS5611_PressureToAltitude(float* pressure/*, float* ground_pressure, float
 	}
 }
 
-INIT_COMPONENT_EXPORT(MS5611_Init);
+INIT_DEVICE_EXPORT(MS5611_Init);
