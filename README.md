@@ -10,6 +10,6 @@
 4. Let's enjot and begin develop.
 
 ## 进度 ##
-1.完成STM32F405RG 的RT-Thread系统移植
-2.完成了SPI驱动
+1. 完成STM32F405RG 的RT-Thread系统移植 
+2. 完成了SPI驱动
 
